@@ -1,0 +1,14 @@
+typedef struct A{
+    int x,y;
+    void read(){
+        scanf("%d %d",&x,&y);
+    }
+    A(){}
+    A(int _x,int _y){
+        x = _x, y = _y;
+    }
+    bool operator < (const A  &a) const{
+        if(a.x!=x) return x<a.x;
+        else    return y>a.y;
+    }
+}AA;
