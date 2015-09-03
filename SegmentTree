@@ -1,0 +1,64 @@
+long long tree[100000*4];
+long long lazy[400000];
+void up(int r){
+    tree[r]=tree[r<<1]+tree[r<<1|1];
+}
+void build(int L,int R,int r)
+{	/*call build(1,N,1) first*/
+    lazy[r]=0;
+    if(L==R)    scanf("%lld",&tree[r]);
+    else{
+        int mid=(L+R)>>1;
+        build(L,mid,r<<1);
+        build(mid+1,R,r<<1|1);
+        up(r);
+    }
+}
+void down(int L,int mid,int R,int r){
+    lazy[r<<1]+=lazy[r];    /*left  subtree*/
+    lazy[r<<1|1]+=lazy[r];  /*right subtree*/
+    tree[r<<1]+=(long long)(mid-L+1)*lazy[r];
+    /*lazy[r] means it's subtrees should be updated,see  TAG 1*/
+    tree[r<<1|1]+=(long long)(R-(mid+1)+1)*lazy[r];
+    lazy[r]=0;
+}
+void update(int x,int y,int z,int L,int R,int r){
+    if(x<=L&&R<=y){
+        lazy[r]+=z;
+        tree[r]+=(long long)(R-L+1)*z;		/*TAG 1*/
+    }
+    else{
+        int mid=(L+R)>>1;
+        if(lazy[r]!=0)  down(L,mid,R,r);
+        /*update downward first*/
+        if(x<=mid) update(x,y,z,L,mid,r<<1);
+        /*some part in left subtree*/
+        if(y>mid) update(x,y,z,mid+1,R,r<<1|1);
+        /*some part in right subtree*/
+        up(r);
+    }
+}
+long long query(int x,int y,int L,int R,int r){
+    if(x<=L&&R<=y)  return tree[r];
+    else    /*need to seek in subtrees*/
+    {
+        long long ans = 0;
+        int mid=(L+R)>>1;
+        if(lazy[r]!=0) down(L,mid,R,r);
+
+        if(x<=mid) ans += query(x,y,L,mid,r<<1);
+        if(y>mid)  ans += query(x,y,mid+1,R,r<<1|1);
+        return ans;
+    }
+}
+/*PRACTICE*/
+build(1,N,1); /*build segment tree*/
+{/*query sum of [x,y]*/
+    scanf("%d %d",&x,&y);
+    ans=query(x,y,1,N,1);
+    printf("%lld\n",ans);
+}
+{/*add z to [x,y]*/
+    scanf("%d %d %d",&x,&y,&z);
+    update(x,y,z,1,N,1);
+}
