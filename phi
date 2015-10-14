@@ -1,0 +1,14 @@
+typedef long long ll;
+const int N = 4000006;
+
+ll phi[N],f[N],sum[N];
+
+int i,j,x;
+phi[1] = 1;
+for(i=2;i<N;i++){
+	if(phi[i]) continue;
+	for(j=i;j<N;j+=i){
+		if(!phi[j]) phi[j] = j;
+		phi[j] = (phi[j]*(i-1)) /i;
+	}
+}
