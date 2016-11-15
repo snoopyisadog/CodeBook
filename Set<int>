@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long ULL;
+
+int a,b;
+int s[64];
+set<ULL> myset;
+
+ULL bin_to_oct(int pos){
+    ULL ret=0;
+    for(int i=0;i<pos;i++){
+        ret <<= 1;
+        ret += s[i];
+    }
+    return ret;
+}void myfill(int pos,int n,int x){
+    for(int i=0;i<n;i++){
+        s[pos+i] = x;
+    }
+}
+
+void bd(){
+    myset.clear();
+    int n,m,run,pos;
+    for(n=63;n>0;n--){
+        for(m=0;m+n<=63;m++){
+            for(run=1;run<=63;run++){
+                if((run/2)*n+(run%2)*n+(run/2)*m > 63) break;
+                pos = 0;
+                int r = run;
+                while(r){
+                    myfill(pos,n,1);
+                    pos += n;
+                    r--;
+                    if(r<=0) break;
+                    myfill(pos,m,0);
+                    pos += m;
+                    r--;
+                }
+                myset.insert(bin_to_oct(pos));
+            }
+        }
+    }
+    printf("size=%d\n",myset.size());
+    /*for(set<ULL>::iterator it=myset.begin();it!=myset.end();++it){
+        printf("%llu!!\n",*it);
+        system("pause");
+    }*/
+}
+
+void sol(){
+    set<ULL>::iterator itrt, itlf,it;
+    itlf = myset.lower_bound(a);
+    //printf("lf=%llu\n",*itlf);
+    itrt = myset.upper_bound(b);
+    //printf("rt=%llu\n",*itrt);
+    int cnt=0;
+    for(it = itlf;it!=itrt;++it){
+        cnt++;
+    }
+    printf("%d\n",cnt);
+}
+
+int main(){
+    bd();
+    while(scanf("%d %d",&a,&b)!=EOF){
+        sol();
+    }
+    return 0;
+}
