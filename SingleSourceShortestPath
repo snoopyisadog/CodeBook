@@ -65,7 +65,10 @@ void dijk(){
                 c = g[s][i].second;
                 cur.t = t;
                 cur.c = d[s] + c;
-                if(cur.c < d[t]) pq.push(cur);
+                if(cur.c < d[t]){
+                    pq.push(cur);
+                    d[t] = cur.c;
+                }
             }
         }
     }
