@@ -64,8 +64,91 @@ typedef struct B{
             else pre->rt = it;
         }
     }
-    void del(int val){
-        ;
+    void del(int del_val){
+        int is_lf;
+        node *pre, *cur;
+        cur = root;
+        if(root == NULL) return;
+        if(root->val == del_val){
+            if(root->lf == NULL){
+                pre = root;
+                root = root->rt;
+                delete(pre);
+            }else if(root->rt == NULL){
+                pre = root;
+                root = root->lf;
+                delete(pre);
+            }else{
+                // messy
+                pre = root;
+                cur = root->rt;
+                is_lf = 0;
+                while(cur->lf != NULL){
+                    pre = cur;
+                    cur = cur->lf;
+                    is_lf = 1;
+                }// now, cur->lf is NULL
+                root->val = cur->val;
+                if(is_lf){
+                    pre->lf = cur->rt;
+                }else{
+                    pre->rt = cur->rt;
+                }
+                delete(cur);
+            }
+            return;
+        }
+        cur = root;
+        while((cur!=NULL)&&(cur->val!=del_val)){
+            pre = cur;
+            if(del_val<cur->val){
+                is_lf = 1;
+                cur = cur->lf;
+            }else if(del_val>cur->val){
+                is_lf = 0;
+                cur = cur->rt;
+            }
+        }
+        if(cur == NULL){
+            //printf("no suck value\n");
+            return;
+        }
+        if(cur->lf == NULL){
+            if(is_lf){
+                pre->lf = cur->rt;
+
+            }else{
+                pre->rt = cur->rt;
+            }
+            delete(cur);
+            return;
+        }else if(cur->rt == NULL){
+            if(is_lf){
+                pre->lf = cur->lf;
+
+            }else{
+                pre->rt = cur->lf;
+            }
+            delete(cur);
+            return;
+        }else{
+            node *sub_root;
+            sub_root = pre = cur;
+            cur = cur->rt;
+            is_lf = 0;
+            while(cur->lf != NULL){
+                pre = cur;
+                cur = cur->lf;
+                is_lf = 1;
+            }
+            sub_root->val = cur->val;
+            if(is_lf){
+                pre->lf = cur->rt;
+            }else{
+                pre->rt = cur->rt;
+            }
+            delete(cur);
+        }
     }
     void traverseOrder(int mode){
         /* 1/2/3: pre/in/post-order, 4: level-order. */
