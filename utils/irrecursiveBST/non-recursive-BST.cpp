@@ -1,14 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define pb push_back
-#define FOR1(a, b) for(int a=1;a<=b;a++)
-#define FOR0(a, b) for(int a=0;a<b;a++)
-#define SIZE_N 100005
-const int INF = 0x3fffffff;
 #define it_c(container) while(!container.empty())
 // iterate a container
-
-int T, n;
 
 typedef struct A{
     struct A *lf, *rt;
@@ -29,11 +23,10 @@ vector<int> vec;
 typedef struct B{
     node *root, *it;
     void clear(){
-        sz = 0;
 		if(NULL==root) return;
-        while(!que.empty()) que.pop();
+        it_c(que) que.pop();
         que.push(root);
-        while(!que.empty()){
+        it_c(que){
             it = que.front(); que.pop();
 			if(it==NULL) continue;
             que.push(it->lf);
@@ -59,10 +52,17 @@ typedef struct B{
                     is_lf = 0;
                 }
             }
-            // cur is child of pre
             if(is_lf) pre->lf = it;
             else pre->rt = it;
         }
+    }
+    node *contains(int val){
+        node *cur = root;
+        while((NULL!=cur) && (cur->val != val)){
+            if(val < cur->val) cur = cur->lf;
+            if(val > cur->val) cur = cur->rt; // may enter both if-statements, but doesn't matter
+        }
+        return cur;
     }
     void del(int del_val){
         int is_lf;
@@ -70,6 +70,7 @@ typedef struct B{
         cur = root;
         if(root == NULL) return;
         if(root->val == del_val){
+            // special case, since root has no predecessors
             if(root->lf == NULL){
                 pre = root;
                 root = root->rt;
@@ -79,7 +80,6 @@ typedef struct B{
                 root = root->lf;
                 delete(pre);
             }else{
-                // messy
                 pre = root;
                 cur = root->rt;
                 is_lf = 0;
@@ -120,8 +120,6 @@ typedef struct B{
             }else{
                 pre->rt = cur->rt;
             }
-            delete(cur);
-            return;
         }else if(cur->rt == NULL){
             if(is_lf){
                 pre->lf = cur->lf;
@@ -129,8 +127,6 @@ typedef struct B{
             }else{
                 pre->rt = cur->lf;
             }
-            delete(cur);
-            return;
         }else{
             node *sub_root;
             sub_root = pre = cur;
@@ -147,17 +143,17 @@ typedef struct B{
             }else{
                 pre->rt = cur->rt;
             }
-            delete(cur);
         }
+		delete(cur);
     }
     void traverseOrder(int mode){
         /* 1/2/3: pre/in/post-order, 4: level-order. */
         vec.clear();
         if(mode==4){
-            while(!que.empty()) que.pop();
+            it_c(que) que.pop();
             que.push(root);
             it_c(que){
-                it = que.front();
+                it = que.front(); que.pop();
                 if(NULL == it) continue;
                 vec.pb(it->val);
                 que.push(it->lf);
@@ -189,45 +185,6 @@ typedef struct B{
         }
         printVec();
     }
-    /***
-        pre/in-order can be simpler than the generalized traversal,
-        but not helpful in time complexity.
-    ***/
-    void printPreOrder(){
-		vec.clear();
-        while(!stk.empty()) stk.pop();
-        stk.push(root);
-        while(!stk.empty()){
-            it = stk.top();
-            stk.pop();
-            if(it==NULL) continue;
-            vec.pb(it->val);
-            stk.push(it->rt);
-            stk.push(it->lf);
-        }
-        printVec();
-    }
-	void printInOrder(){
-	    int cnt;
-		vec.clear();
-		it_c(stk) stk.pop();
-		it_c(stk2) stk2.pop();
-        stk.push(root); stk2.push(1);
-        while(!stk.empty()){
-            it = stk.top(); stk.pop();
-            cnt = stk2.top(); stk2.pop();
-            if(it==NULL) continue;
-            if(cnt==1){
-                stk.push(it->rt); stk2.push(1);
-                stk.push(it); stk2.push(2);
-                stk.push(it->lf); stk2.push(1);
-            }else{
-                // cnt==2: in-order
-                vec.pb(it->val);
-            }
-        }
-        printVec();
-	}
 	void printVec(){
 	    if(!vec.empty()){
             printf("%d", vec[0]);
