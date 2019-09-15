@@ -24,12 +24,12 @@ vector<int> vec;
 typedef struct B{
     node *root, *it;
     void clear(){
-		if(NULL==root) return;
+        if(NULL==root) return;
         it_c(que) que.pop();
         que.push(root);
         it_c(que){
             it = que.front(); que.pop();
-			if(it==NULL) continue;
+            if(it==NULL) continue;
             que.push(it->ch[0]);
             que.push(it->ch[1]);
             delete(it);
@@ -53,7 +53,7 @@ typedef struct B{
                     is_rt = 1;
                 }
             }
-			pre->ch[is_rt] = it;
+            pre->ch[is_rt] = it;
         }
     }
     node *contains(int val){
@@ -71,26 +71,26 @@ typedef struct B{
         if(root == NULL) return;
         if(root->v == del_val){
             // special case, since root has no predecessors
-			for0(i, 2){
-				if(root->ch[i] == NULL){
-					pre = root;
-					root = root->ch[i^1];
-					delete(pre);
-					return;
-				}
-			}
-			// find the smallest in right subtree
-			pre = root;
-			cur = root->ch[1];
-			is_rt = 1;
-			while(cur->ch[0] != NULL){
-				pre = cur;
-				cur = cur->ch[0];
-				is_rt = 0;
-			}// now, cur->lf is NULL
-			root->v = cur->v;
-			pre->ch[is_rt] = cur->ch[1];
-			delete(cur);
+            for0(i, 2){
+                if(root->ch[i] == NULL){
+                    pre = root;
+                    root = root->ch[i^1];
+                    delete(pre);
+                    return;
+                }
+            }
+            // find the smallest in right subtree
+            pre = root;
+            cur = root->ch[1];
+            is_rt = 1;
+            while(cur->ch[0] != NULL){
+                pre = cur;
+                cur = cur->ch[0];
+                is_rt = 0;
+            }// now, cur->lf is NULL
+            root->v = cur->v;
+            pre->ch[is_rt] = cur->ch[1];
+            delete(cur);
             return;
         }
         cur = root;
@@ -101,19 +101,19 @@ typedef struct B{
             }else if(del_val>cur->v){
                 is_rt = 1;
             }
-			cur = cur->ch[is_rt];
+            cur = cur->ch[is_rt];
         }
         if(cur == NULL){
             //printf("no such value\n");
             return;
         }
-		for0(i, 2){
-			if(cur->ch[i] == NULL){
-				pre->ch[is_rt] = cur->ch[i^1];
-				break;
-			}
-		}
-		if(i>=2){ // both subtrees are non-empty
+        for0(i, 2){
+            if(cur->ch[i] == NULL){
+                pre->ch[is_rt] = cur->ch[i^1];
+                break;
+            }
+        }
+        if(i>=2){ // both subtrees are non-empty
             node *sub_root;
             sub_root = pre = cur;
             //printf("sub_root=%d->%d\n", sub_root, sub_root->v);
@@ -127,9 +127,9 @@ typedef struct B{
             }
             //printf("cur->v=%d\n", cur->v);
             sub_root->v = cur->v;
-			pre->ch[is_rt] = cur->ch[1];
+            pre->ch[is_rt] = cur->ch[1];
         }
-		delete(cur);
+        delete(cur);
     }
     void traverseOrder(int mode){
         /* 1/2/3: pre/in/post-order, 4: level-order. */
@@ -170,13 +170,13 @@ typedef struct B{
         }
         printVec();
     }
-	void printVec(){
-	    if(!vec.empty()){
+    void printVec(){
+        if(!vec.empty()){
             printf("%d", vec[0]);
             for(int i=1;i<vec.size();i++) printf(" %d", vec[i]);
-	    }
-	    puts("");
-	}
+        }
+        puts("");
+    }
 }BST;
 
 BST bst;
