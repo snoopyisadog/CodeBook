@@ -3,6 +3,10 @@
 - Binary Search Tree
 - non-recursive
 
+## motivation
+When we are preparing problems for a programming contest, we would expect the participants to summit a faster solution than a naive one. However, we may need the naive one to side check if the testcases are correct. For BST-related problems, especially the unbalanced BSTs, we all know that the worst case is a linked-list, which complexify the time complexity of every single Insert/Delete/Search to $O(n)$, where $n$ is the number of nodes in the tree. While $n$ increases to tens of thousands or above, a recursive BST program will throw out stack overflow exceptions (RunTime Error).
+Hereby, we have implemented a non-recursive BST in C++, in order to avoid getting stack overflow exceptions.
+
 Details
 ==
 ## Insert
