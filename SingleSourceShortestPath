@@ -59,6 +59,7 @@ void dijk(){
         cur = pq.top(); pq.pop();
         s = cur.t;
         if(cur.c<d[s]){// update
+        // do a counter here, if counter updates V-1 times then we can halt the program earlier.
             d[s] = cur.c;
             for(i=0;i<g[s].size();i++){
                 t = g[s][i].first;
